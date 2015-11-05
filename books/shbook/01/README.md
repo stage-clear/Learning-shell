@@ -507,6 +507,16 @@ __パイプライン処理の例__
 # echo 結果を wc に渡す
 $ echo abc | wc
 
-# cat コマンドで file1 と file2 を連続して表示
+# cat コマンドで file1 と file2 を連続して表示する
 $ cat file1 file2 | sort | more
+```
+
+パイプライン上にあるコマンドは、それぞれが別のプロセスとして動作して、それぞれが同時に動いている。
+
+```sh
+$ command1 | command2
+
+# この処理をパイプを使わずに書き直すと次のようになる
+$ command1 > tmpfile; comand2 < tmpfile
+# command1 の結果を tmpfile に書き込み、その後 tmpfile を command2 の入力とする
 ```
