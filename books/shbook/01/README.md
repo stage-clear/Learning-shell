@@ -623,13 +623,213 @@ $ {data; make;} > make.list
 
 ## 1.10.1 if 文
 
+- `if` は必ず `fi` で終わらなければならない
+- `if` `then` `fi` の3つが最小の構成要素です
+
+__基本構文__
+
+```sh
+if command-list
+then
+  command
+else
+  command
+fi
+```
+
+`command-list` の部分に頻繁に使われるのは `test` コマンドです
+
+例) FIE というファイルがあれば "The file exists."、なければ "The file does not exists"
+と表示する
+
+```sh
+if test -f FILE
+then
+  echo "The file exists."
+else
+  echo "The file does not exist."
+fi
+
+# else の部分は書かなくてもかまいません
+if test -f FILE
+then
+  echo "The file exists."
+fi
+# この場合は、FILEというファイルがなかったら何もしない
+```
+
+`if` と同じ行に `then` を書く場合は、`then` の前に `;` が必要となる
+
+```sh
+if test -f FILE; then
+  echo "The file exists."
+fi
+```
+
+`test` コマンドは、鉤括弧 `[]` で代用可能です。（鉤括弧は閉じなければいけません）
+
+```sh
+if [-f FILE]; then
+  echo "The file exists"
+fi
+```
+
+条件が複数あり複雑になった場合は、`elif` 文を利用します
+
+```sh
+if condition1
+then
+  command
+elif condition2
+then
+  command
+elif condition3
+then
+  command
+else
+  command
+fi
+
+# elif ではなく、if の中で if をネストさせることも可能です
+if  condition1; then
+  if condition2; then
+    command
+  fi
+fi
+```
+
+
 ### 1.10.2 for 文
+
+__基本構文__
+
+```sh
+for variavle in word-list
+do
+  command
+done
+```
+
+- 変数 `variable` に `word-list` に並んだ値が順番に1個ずつ代入されます
+- 1つ1つに関して、`do` から `done` までのコマンドを実行します
+- `word-list` に当たるところは、スペースで区切って並べます
+
+```sh
+for i in a b c d
+do
+  echo $i
+done
+# a
+# b
+# c
+# d
+```
+
 
 ### 1.10.3 while 文
 
+- 条件が `true` である限り処理をずっと繰り返す
+
+
+__基本構文__
+
+```sh
+while command-list
+do
+  command
+done
+```
+
+例)
+
+```sh
+a=1
+while test $a -lt 3     # a の値が 3 より小さいか
+do
+  echo $a
+  a=`expr $a + 1`
+done
+```
+
+ループを抜けるには、`break` `return` `exit` などのコマンドが使える
+
+```sh
+while :     # `:` は何も処理せず、0 を終了コードとして返す」
+do
+  ...
+  if ...
+  then
+    break
+  fi
+done
+```
+
 ### 1.10.4 case 文
+
+- `case` 文は、いくつかの条件を並べ、合致する条件に対する処理だけを実行する
+
+__基本構文__
+
+```sh
+case string in
+  pattern1) command-list ;;
+  pattern2) command-list ;;
+  pattern3) command-list ;;
+esac
+```
+
+- `string` の値が、それぞれの `pattern` という条件に合うかを調べる
+- 条件が合った場合に、その後ろにある `command-list` になれべられた一連のコマンドが実行
+される
+- `command-list` にコマンドを書かなくてもかまわいません
+- `;;` を忘れてはいけません
+
+例)
+
+```sh
+STRING=abc
+case "$STRING" in
+  ABC) echo "STRING is ABC" ;;
+  abc) echo "STRING is abc" ;;
+  xyz) echo "STRING is xyz" ;;
+esac
+```
+
+パターンの指定にはワイルドカードも利用できます。
+
+|WildCard|Summary|
+|:--|:--|
+|`*`|文字列全部（文字がなくても）に合致する|
+|`?`|1文字に合致する|
+|`[...]`|`[ ]` の中に含まれる文字のどれかに合致する|
+|`[!...]`|`[ ]` に含まれない文字に合致する|
+
+
+例）ワイルドカードを使った例
+
+```sh
+case string in
+  abc ) command-list ;;   # これは abc です
+  def | ghi ) ;;          # これは def か ghi かのどちらかです
+  abc* ) ;;               # これは abc で始まる文字列です
+  [Yy]* ) ;;              # Y か y で始まる文字列（Yes No の判定に使える）
+  "[Yy]" ) ;;             # これは Y あるいは y に限る
+  "[Yy]*" ) ;;            # これは Y* あるいは　y* という文字に限る
+  "[Yy]"* ) ;;            # Y か y で始まる文字列（3つ上と同じ）
+  [!Nn]* ) ;;             # N でも n でも始まらな文字列
+  [a-z]*[AB] ) ;;         # 小文字で始まり A か B で終わる文字列
+  \* ) ;;                 # これはアスタリスク（*）です
+  "*" ) ;;                # これもアスタリスク（*）です
+  '*' ) ;;                # これまたアスタリスク（*）です
+  \? ) ;;                 # これはクエスチョンマークです
+  ? ) ;;                  # なにか 1文字です
+  "" ) ;;                 # なにもない（Null 文字や変数が未セット）場合
+  '""' ) ;;               # ダブルクォーテーションが2つ並んでいる場合
+  \"\" ) ;;               # 上の意味と同じになります
+  * ) ;;                  # 今までの条件に合致しない残り全部
+esac
+```
 
 ### 1.10.5 test コマンド
 
 ## 1.11 改行コードとセミコロン
-
