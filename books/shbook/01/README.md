@@ -783,6 +783,7 @@ esac
 される
 - `command-list` にコマンドを書かなくてもかまわいません
 - `;;` を忘れてはいけません
+- `*` は「すべてに合致する」という意味なので、全部に合致しなかった場合に利用できる
 
 例)
 
@@ -792,6 +793,7 @@ case "$STRING" in
   ABC) echo "STRING is ABC" ;;
   abc) echo "STRING is abc" ;;
   xyz) echo "STRING is xyz" ;;
+  *) echo "default" ;;
 esac
 ```
 
@@ -832,4 +834,72 @@ esac
 
 ### 1.10.5 test コマンド
 
+- ある条件を判定し、その条件が正しい場合には真（`0`）を返し、誤っている場合には偽（`0`以外）
+を返します
+- いろいろなオプションがあって、かなり複雑な判定も簡単に行えるようになっています
+
+
+例) if の判定に test コマンドを使う
+
+```sh
+if test -r FILE
+then
+  echo "The file exists and I can read it."
+fi
+# FILE が存在し且つそのファイルを読むことができる場合に限って真を返す
+```
+
+例) test コマンドを鉤括弧（`[]`）に置き換える
+
+```sh
+if [ -r FILE ]
+then
+  echo "The file exists and I can read it."
+fi
+```
+
+例) while 文でつかってみる
+
+```sh
+while [ expression ]  # 何らかの条件
+do
+  command
+done
+```
+
+
 ## 1.11 改行コードとセミコロン
+
+- 改行コードではなくセミコロン `;` を使うことで複数のコマンドを1行に書ける
+
+```sh
+if command-list
+then
+  command
+fi
+
+if command-list; then
+  command
+fi
+
+if command-list; then command; ...; fi
+```
+
+シェルプログラムを見やすくするために行われる場合も多いが、コマンドによっては1行にまとめ
+ないと期待どうりに動作してくれないものもある。（リモートシェルコマンドや `Makefile` の
+中で使われる場合など）
+
+
+例) フロー制御文を使わずに書いた例
+
+```sh
+if command-list; then command; else command; fi
+
+if command-list; then command; elif command-list; then command; else command; fi
+
+for variable in word-list; do command; done
+
+while command-list; do command; done
+
+case string in pattern) command-list ;; pattern) command-list ;; esac
+```
