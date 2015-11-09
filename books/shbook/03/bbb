@@ -1,0 +1,4 @@
+#!/bin/sh
+echo -n "enter yes or no -->"
+# echo "yes of no --> \c"
+read ANSWER
