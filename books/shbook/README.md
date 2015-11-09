@@ -25,4 +25,5 @@ __付録__
 ## リンク
 
 - [入門ＵＮＩＸシェルプログラミング 改訂第２版](http://www.sbcr.jp/products/4797321946.html)
+- [【正誤情報】入門UNIXシェルプログラミング 改訂第2版](http://www.sbcr.jp/support/8429.html)
 - [Amazon](http://www.amazon.co.jp/dp/4797321946)
