@@ -2,7 +2,7 @@
 
 ## 書籍での学習
 
-- [UNIX シェルスクリプト](book/shbook/)
+- [UNIX シェルスクリプト](books/shbook/)
 
 
 ## リファレンス
