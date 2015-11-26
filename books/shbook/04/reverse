@@ -1,0 +1,7 @@
+#!/bin/sh
+
+ed - edit <<- !
+g/^/m0
+w
+q
+!

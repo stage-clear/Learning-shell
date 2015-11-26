@@ -1,0 +1,9 @@
+#!/bin/sh
+
+OLDIFS=$IFS
+IFS=
+while read LINE
+do
+  echo "$LINE"
+done
+IFS=$OLDIFS
